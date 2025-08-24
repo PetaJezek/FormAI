@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forma", "Forma\Forma.csproj", "{2D1258F9-FF16-4FAE-BF8D-2F38851E694D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormAI", "FormAI\FormAI.csproj", "{2D1258F9-FF16-4FAE-BF8D-2F38851E694D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

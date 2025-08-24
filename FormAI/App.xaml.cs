@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Forma;
+namespace FormAI;
 
 /// <summary>
 /// Interaction logic for App.xaml

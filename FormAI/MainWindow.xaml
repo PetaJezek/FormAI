@@ -1,0 +1,211 @@
+﻿<Window x:Class="FormAI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FormAI" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="CanResizeWithGrip"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
+    
+    <Window.Resources>
+        <!-- Main gradient background -->
+        <LinearGradientBrush x:Key="MainBackgroundBrush" StartPoint="0.2,0.2" EndPoint="0.8,0.8">
+            <GradientStop Color="#1A1D1F" Offset="0.0"/>
+            <GradientStop Color="#2B2E30" Offset="1.0"/>
+        </LinearGradientBrush>
+        
+        <!-- Molecule styles -->
+        <Style x:Key="ProteinMolecule" TargetType="Ellipse">
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#8B5CF6" Offset="0"/>
+                        <GradientStop Color="#7C3AED" Offset="1"/>
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#8B5CF6" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="CarbMolecule" TargetType="Ellipse">
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#A855F7" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#A855F7" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="FatMolecule" TargetType="Ellipse">
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#C084FC" Offset="0"/>
+                        <GradientStop Color="#A855F7" Offset="1"/>
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#C084FC" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- FormAI Logo Style -->
+        <Style x:Key="LogoStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="72"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#8B5CF6" Offset="0"/>
+                        <GradientStop Color="#A855F7" Offset="0.5"/>
+                        <GradientStop Color="#C084FC" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#8B5CF6" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Start Button Style -->
+        <Style x:Key="StartButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" 
+                                CornerRadius="30"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0">
+                            <Border.Effect>
+                                <DropShadowEffect x:Name="ButtonShadow" 
+                                                Color="#8B5CF6" 
+                                                BlurRadius="25" 
+                                                ShadowDepth="0" 
+                                                Opacity="0.3"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ButtonBorder"
+                                                           Storyboard.TargetProperty="Effect.Opacity"
+                                                           To="0.5" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="ButtonBorder"
+                                                           Storyboard.TargetProperty="Effect.BlurRadius"
+                                                           To="35" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ButtonBorder"
+                                                           Storyboard.TargetProperty="Effect.Opacity"
+                                                           To="0.3" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="ButtonBorder"
+                                                           Storyboard.TargetProperty="Effect.BlurRadius"
+                                                           To="25" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#8B5CF6" Offset="0"/>
+                        <GradientStop Color="#A855F7" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Background="{StaticResource MainBackgroundBrush}"
+      MouseLeftButtonDown="Root_MouseLeftButtonDown">
+        <!-- Animated molecules canvas -->
+        <Canvas x:Name="MoleculesCanvas" ClipToBounds="True">
+            <!-- Molecules will be added programmatically in code-behind -->
+        </Canvas>
+        
+        <!-- Main content -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <!-- FormAI Logo -->
+            <TextBlock x:Name="LogoText" 
+                       Text="FormAI" 
+                       Style="{StaticResource LogoStyle}"
+                       Margin="0,0,0,80">
+                
+                <TextBlock.Effect>
+                    <DropShadowEffect x:Name="LogoShadow" Color="#8B5CF6" BlurRadius="30" ShadowDepth="0"></DropShadowEffect>
+                </TextBlock.Effect>
+                
+                <!-- Logo glow animation -->
+                <TextBlock.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LogoShadow"
+                                                               Storyboard.TargetProperty="Opacity"
+                                                               Duration="0:0:3">
+                                    <LinearDoubleKeyFrame Value="0.6" KeyTime="0:0:0" />
+                                    <LinearDoubleKeyFrame Value="1.0" KeyTime="0:0:1.5" />
+                                    <LinearDoubleKeyFrame Value="0.6" KeyTime="0:0:3" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </TextBlock.Triggers>
+            </TextBlock>
+            
+            <!-- Start Button -->
+            <Button x:Name="StartButton" 
+                    Content="Start Your Journey" 
+                    Style="{StaticResource StartButtonStyle}"
+                    Click="StartButton_Click">
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

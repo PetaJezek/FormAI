@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Forma;
+namespace FormAI;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -19,5 +19,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        InitializeMoleculeAnimation();
+        
+        
     }
 }
