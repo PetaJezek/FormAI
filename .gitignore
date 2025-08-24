@@ -1,0 +1,11 @@
+﻿/Forma.sln
+# Rider / JetBrains specific files
+.idea/
+
+# Visual Studio / .NET cache folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
