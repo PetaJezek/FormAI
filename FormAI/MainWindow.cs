@@ -14,113 +14,84 @@ namespace FormAI
 {
     public partial class MainWindow : Window
     {
-        private DispatcherTimer moleculeTimer;
+        private DispatcherTimer bubbleTimer;
         private Random random = new Random();
-        private List<Ellipse> activeMolecules = new List<Ellipse>();
+        private List<Ellipse> activeBubbles = new List<Ellipse>();
 
-        
-        
-        private void InitializeMoleculeAnimation()
+
+
+        private void InitializeBubbleAnimation()
         {
-            // Timer to create new molecules periodically
-            moleculeTimer = new DispatcherTimer();
-            moleculeTimer.Interval = TimeSpan.FromMilliseconds(800); // Create molecule every 800ms
-            moleculeTimer.Tick += CreateMolecule;
-            moleculeTimer.Start();
+            // Timer to create new bubbles periodically
+            bubbleTimer = new DispatcherTimer();
+            bubbleTimer.Interval = TimeSpan.FromMilliseconds(800); // Create bubble every 800ms
+            bubbleTimer.Tick += CreateBubble;
+            bubbleTimer.Start();
             
-            // Create initial molecules
+            // Create initial bubbles
             for (int i = 0; i < 15; i++)
             {
-                CreateMolecule(null, null);
+                CreateBubble(null, null);
             }
         }
-        private void Root_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                // Optional: double-click to toggle maximize/restore
-                if (e.ClickCount == 2)
-                {
-                    WindowState = WindowState == WindowState.Maximized
-                        ? WindowState.Normal
-                        : WindowState.Maximized;
-                    return;
-                }
-
-                DragMove();
-            }
-        }
-
         
-        private void CreateMolecule(object sender, EventArgs e)
+        private void CreateBubble(object sender, EventArgs e)
         {
-            // Remove old molecules to prevent memory buildup
-            if (activeMolecules.Count > 40)
+            // Remove old bubbles to prevent memory buildup
+            if (activeBubbles.Count > 40)
             {
-                var oldMolecule = activeMolecules[0];
-                MoleculesCanvas.Children.Remove(oldMolecule);
-                activeMolecules.RemoveAt(0);
+                var oldBubble = activeBubbles[0];
+                BubblesCanvas.Children.Remove(oldBubble);
+                activeBubbles.RemoveAt(0);
             }
             
-            // Create new molecule
-            var molecule = new Ellipse();
+            // Create new bubble
+            var bubble = new Ellipse();
+            bubble.Style = (Style)FindResource("BubbleStyle");
             
-            // Randomly choose molecule type (Protein, Carb, or Fat)
-            string[] moleculeTypes = { "Protein", "Carb", "Fat" };
-            string moleculeType = moleculeTypes[random.Next(moleculeTypes.Length)];
+            // Vary bubble sizes slightly for more visual interest
+            double size = 8 + random.NextDouble() * 8; // Size between 8-16
+            bubble.Width = size;
+            bubble.Height = size;
             
-            // Apply appropriate style
-            switch (moleculeType)
-            {
-                case "Protein":
-                    molecule.Style = (Style)FindResource("ProteinMolecule");
-                    break;
-                case "Carb":
-                    molecule.Style = (Style)FindResource("CarbMolecule");
-                    break;
-                case "Fat":
-                    molecule.Style = (Style)FindResource("FatMolecule");
-                    break;
-            }
-            
-            // Position molecule randomly at bottom of screen
+            // Position bubble randomly at bottom of screen
             double startX = random.NextDouble() * ActualWidth;
             double startY = ActualHeight + 20; // Start just below visible area
             
-            Canvas.SetLeft(molecule, startX);
-            Canvas.SetTop(molecule, startY);
+            Canvas.SetLeft(bubble, startX);
+            Canvas.SetTop(bubble, startY);
             
             // Add to canvas
-            MoleculesCanvas.Children.Add(molecule);
-            activeMolecules.Add(molecule);
+            BubblesCanvas.Children.Add(bubble);
+            activeBubbles.Add(bubble);
             
             // Create floating animation
-            AnimateMolecule(molecule);
+            AnimateBubble(bubble);
         }
-        
-        private void AnimateMolecule(Ellipse molecule)
+
+        private void AnimateBubble(Ellipse bubble)
         {
             // Create floating animation
             var storyboard = new Storyboard();
             
             // Y-axis movement (floating up)
             var translateYAnimation = new DoubleAnimation();
-            translateYAnimation.From = Canvas.GetTop(molecule);
+            translateYAnimation.From = Canvas.GetTop(bubble);
             translateYAnimation.To = -50; // End above visible area
             translateYAnimation.Duration = TimeSpan.FromSeconds(random.NextDouble() * 8 + 10); // 10-18 seconds
             translateYAnimation.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut };
             
             // X-axis movement (slight drift)
             var translateXAnimation = new DoubleAnimation();
-            translateXAnimation.From = Canvas.GetLeft(molecule);
-            translateXAnimation.To = Canvas.GetLeft(molecule) + (random.NextDouble() * 200 - 100); // Drift ±100 pixels
+            translateXAnimation.From = Canvas.GetLeft(bubble);
+            translateXAnimation.To = Canvas.GetLeft(bubble) + (random.NextDouble() * 200 - 100); // Drift ±100 pixels
             translateXAnimation.Duration = translateYAnimation.Duration;
             translateXAnimation.EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut };
             
             // Rotation animation
             var rotateTransform = new RotateTransform();
-            molecule.RenderTransform = rotateTransform;
-            molecule.RenderTransformOrigin = new Point(0.5, 0.5);
+            bubble.RenderTransform = rotateTransform;
+            bubble.RenderTransformOrigin = new Point(0.5, 0.5);
             
             var rotationAnimation = new DoubleAnimation();
             rotationAnimation.From = 0;
@@ -149,14 +120,13 @@ namespace FormAI
             };
             opacityAnimation.Duration = translateYAnimation.Duration;
             
-            
-            
             // Scale animation (subtle pulsing)
             var scaleTransform = new ScaleTransform();
             var transformGroup = new TransformGroup();
             transformGroup.Children.Add(scaleTransform);
             transformGroup.Children.Add(rotateTransform);
-            molecule.RenderTransform = transformGroup;
+            bubble.RenderTransform = transformGroup;
+            
             // Scale animation (subtle pulsing) - Compact Version
             var scaleAnimation = new DoubleAnimationUsingKeyFrames
             {
@@ -174,23 +144,23 @@ namespace FormAI
             scaleAnimation.RepeatBehavior = RepeatBehavior.Forever;
             
             // Set up animation targets
-            Storyboard.SetTarget(translateYAnimation, molecule);
+            Storyboard.SetTarget(translateYAnimation, bubble);
             Storyboard.SetTargetProperty(translateYAnimation, new PropertyPath("(Canvas.Top)"));
             
-            Storyboard.SetTarget(translateXAnimation, molecule);
+            Storyboard.SetTarget(translateXAnimation, bubble);
             Storyboard.SetTargetProperty(translateXAnimation, new PropertyPath("(Canvas.Left)"));
             
-            Storyboard.SetTarget(rotationAnimation, molecule);
+            Storyboard.SetTarget(rotationAnimation, bubble);
             Storyboard.SetTargetProperty(rotationAnimation, new PropertyPath("RenderTransform.Children[1].Angle"));
             
-            Storyboard.SetTarget(opacityAnimation, molecule);
+            Storyboard.SetTarget(opacityAnimation, bubble);
             Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
             
-            Storyboard.SetTarget(scaleAnimation, molecule);
+            Storyboard.SetTarget(scaleAnimation, bubble);
             Storyboard.SetTargetProperty(scaleAnimation, new PropertyPath("RenderTransform.Children[0].ScaleX"));
             
             var scaleYAnimation = scaleAnimation.Clone();
-            Storyboard.SetTarget(scaleYAnimation, molecule);
+            Storyboard.SetTarget(scaleYAnimation, bubble);
             Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.Children[0].ScaleY"));
             
             // Add animations to the storyboard
@@ -205,78 +175,149 @@ namespace FormAI
             storyboard.Begin();
         }
         
+        // Buttons Functions
+        
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            // Handle login/guest selection logic here
-            
-            // Check if user is logged in (you'll implement this logic)
-            bool isLoggedIn = false; // Replace with actual login check
-            
-            if (!isLoggedIn)
+            // Create smooth transition animation
+            var fadeOutStoryboard = new Storyboard();
+            var fadeInStoryboard = new Storyboard();
+
+            // Fade out the start button
+            var fadeOutAnimation = new DoubleAnimation
             {
-                // Change button to show login options
-                ShowLoginOptions();
-            }
-            else
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+
+            Storyboard.SetTarget(fadeOutAnimation, StartButton);
+            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath("Opacity"));
+            fadeOutStoryboard.Children.Add(fadeOutAnimation);
+
+            // When fade out completes, hide start button and show auth buttons
+            fadeOutStoryboard.Completed += (s, args) =>
             {
-                // User is logged in, proceed to main app
-                ProceedToMainApp();
-            }
+                StartButton.Visibility = Visibility.Collapsed;
+                AuthButtonsPanel.Visibility = Visibility.Visible;
+                AuthButtonsPanel.Opacity = 0; // Start invisible
+
+                // Fade in the auth buttons
+                var fadeInAnimation = new DoubleAnimation
+                {
+                    From = 0.0,
+                    To = 1.0,
+                    Duration = TimeSpan.FromMilliseconds(400),
+                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+                };
+
+                Storyboard.SetTarget(fadeInAnimation, AuthButtonsPanel);
+                Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath("Opacity"));
+                fadeInStoryboard.Children.Add(fadeInAnimation);
+
+                // Add slide-up animation for auth buttons
+                var slideAnimation = new DoubleAnimation
+                {
+                    From = 30,
+                    To = 0,
+                    Duration = TimeSpan.FromMilliseconds(400),
+                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+                };
+
+                var translateTransform = new TranslateTransform(0, 30);
+                AuthButtonsPanel.RenderTransform = translateTransform;
+
+                Storyboard.SetTarget(slideAnimation, AuthButtonsPanel);
+                Storyboard.SetTargetProperty(slideAnimation, new PropertyPath("RenderTransform.Y"));
+                fadeInStoryboard.Children.Add(slideAnimation);
+
+                fadeInStoryboard.Begin();
+            };
+
+            // Start the fade out animation
+            fadeOutStoryboard.Begin();
         }
         
-        private void ShowLoginOptions()
+        private void Root_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Create a simple popup or change the UI to show login/guest options
-            var result = MessageBox.Show("Would you like to log in or continue as a guest?", 
-                                       "Welcome to FormAI", 
-                                       MessageBoxButton.YesNoCancel, 
-                                       MessageBoxImage.Question);
-            
-            switch (result)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                case MessageBoxResult.Yes:
-                    // Show login form (you'll implement this)
-                    ShowLoginForm();
-                    break;
-                case MessageBoxResult.No:
-                    // Continue as guest
-                    ContinueAsGuest();
-                    break;
-                case MessageBoxResult.Cancel:
-                    // Do nothing, stay on welcome screen
-                    break;
+                // Optional: double-click to toggle maximize/restore
+                if (e.ClickCount == 2)
+                {
+                    WindowState = WindowState == WindowState.Maximized
+                        ? WindowState.Normal
+                        : WindowState.Maximized;
+                    return;
+                }
+
+                DragMove();
             }
         }
-        
-        private void ShowLoginForm()
+
+        protected override void OnStateChanged(EventArgs e)
         {
-            // TODO: Implement login form
-            MessageBox.Show("Login form would be shown here");
-            // After successful login, call ProceedToMainApp()
+            UpdateMaximizeButton();
+            base.OnStateChanged(e);
         }
-        
-        private void ContinueAsGuest()
+
+        private void UpdateMaximizeButton()
         {
-            // TODO: Set guest mode
-            MessageBox.Show("Continuing as guest...");
-            ProceedToMainApp();
+            if (MaximizeButton != null)
+            {
+                MaximizeButton.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
+            }
         }
-        
-        private void ProceedToMainApp()
-        {
-            // TODO: Navigate to main application window
-            MessageBox.Show("Proceeding to main FormAI application...");
-            
-            // Example: Open main window and close this one
-            // var mainAppWindow = new MainAppWindow();
-            // mainAppWindow.Show();
-            // this.Close();
-        }
-        
+
         protected override void OnClosed(EventArgs e)
         {
-            moleculeTimer?.Stop();
+            bubbleTimer?.Stop();
             base.OnClosed(e);
+        }
+
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (e.ClickCount == 2)
+                {
+                    WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+                    return;
+                }
+
+                DragMove();
+            }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Open the register page
+            var registerPage = new RegisterPage();
+            registerPage.Show();
+            this.Close();
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Open your login flow here
+            MessageBox.Show("Login clicked.");
         }
     }
 }
+    
