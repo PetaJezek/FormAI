@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Drop Shadow Effects -->
+    <DropShadowEffect x:Key="SoftGlowEffect" 
+                      Color="{StaticResource Purple1}" 
+                      BlurRadius="20" 
+                      ShadowDepth="0" 
+                      Opacity="0.3"/>
+    
+    <DropShadowEffect x:Key="MediumGlowEffect" 
+                      Color="{StaticResource Purple1}" 
+                      BlurRadius="25" 
+                      ShadowDepth="0" 
+                      Opacity="0.4"/>
+    
+    <DropShadowEffect x:Key="StrongGlowEffect" 
+                      Color="{StaticResource Purple1}" 
+                      BlurRadius="30" 
+                      ShadowDepth="0" 
+                      Opacity="0.6"/>
+    
+    <!-- Logo Glow Animation -->
+    <Storyboard x:Key="LogoGlowAnimation" RepeatBehavior="Forever">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.Opacity" Duration="0:0:3">
+            <LinearDoubleKeyFrame Value="0.6" KeyTime="0:0:0" />
+            <LinearDoubleKeyFrame Value="1.0" KeyTime="0:0:1.5" />
+            <LinearDoubleKeyFrame Value="0.6" KeyTime="0:0:3" />
+        </DoubleAnimationUsingKeyFrames>
+    </Storyboard>
+    
+    <!-- Fade In Animation -->
+    <Storyboard x:Key="FadeInAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="0" To="1" Duration="0:0:0.5"/>
+    </Storyboard>
+    
+    <!-- Slide In From Left Animation -->
+    <Storyboard x:Key="SlideInLeftAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                         From="-100" To="0" Duration="0:0:0.5">
+            <DoubleAnimation.EasingFunction>
+                <CubicEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="0" To="1" Duration="0:0:0.5"/>
+    </Storyboard>
+    
+    <!-- Slide In From Right Animation -->
+    <Storyboard x:Key="SlideInRightAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                         From="100" To="0" Duration="0:0:0.5">
+            <DoubleAnimation.EasingFunction>
+                <CubicEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="0" To="1" Duration="0:0:0.5"/>
+    </Storyboard>
+    
+</ResourceDictionary>

@@ -1,0 +1,56 @@
+﻿<local:BaseWindow x:Class="FormAI.MealPlanPage"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:local="clr-namespace:FormAI"
+                  xmlns:controls="clr-namespace:FormAI"
+                  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+
+                  Title="FormAI - Calendar" Height="800" Width="1200"
+                  WindowStartupLocation="CenterScreen"
+                  Style="{StaticResource BaseWindowStyle}">
+    
+    <Grid Background="{StaticResource MainBackgroundBrush}">
+        <!-- Title Bar (Unchanged) -->
+        <Grid Height="35" VerticalAlignment="Top" Background="{StaticResource TitleBarBrush}" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="FormAI - MealPlan" Grid.Column="0" Style="{StaticResource TitleTextStyle}"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button x:Name="MinimizeButton" Content="&#xE921;" Style="{StaticResource WindowControlButton}" Click="MinimizeButton_Click"/>
+                <Button x:Name="MaximizeButton" Content="&#xE922;" Style="{StaticResource WindowControlButton}" Click="MaximizeButton_Click"/>
+                <Button x:Name="CloseButton" Content="&#xE8BB;" Style="{StaticResource CloseButton}" Click="CloseButton_Click"/>
+            </StackPanel>
+        </Grid>
+        
+        <Grid Margin="0,35,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <controls:NavigationSidebar Grid.Column="0" x:Name="NavigationSidebar"/>
+            
+            <Grid Grid.Column="1" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header (Unchanged) -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
+                    <TextBlock x:Name="HeaderText" Text="Meal Plan" FontSize="36" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                <!-- CHANGE 2: The Grid container is no longer needed -->
+                <!-- Just place the WebView2 control directly in the row -->
+                
+                <!-- CHANGE 3: Replace the <WebBrowser> with the new <wv2:WebView2> -->
+                <wv2:WebView2 x:Name="MarkdownBrowser" 
+                              Grid.Row="1" 
+                              Margin="20,0,20,20"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</local:BaseWindow>

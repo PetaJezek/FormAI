@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Color Resources -->
+    <Color x:Key="DarkGray1">#1A1D1F</Color>
+    <Color x:Key="DarkGray2">#2B2E30</Color>
+    <Color x:Key="LightGray">#CCCCCC</Color>
+    <Color x:Key="HoverGray">#404040</Color>
+    <Color x:Key="CloseRed">#E81123</Color>
+    
+    <!-- Purple gradient colors -->
+    <Color x:Key="Purple1">#8B5CF6</Color>
+    <Color x:Key="Purple2">#A855F7</Color>
+    <Color x:Key="Purple3">#C084FC</Color>
+    
+    <!-- Brushes -->
+    <LinearGradientBrush x:Key="MainBackgroundBrush" StartPoint="0.2,0.2" EndPoint="0.8,0.8">
+        <GradientStop Color="{StaticResource DarkGray1}" Offset="0.0"/>
+        <GradientStop Color="{StaticResource DarkGray2}" Offset="1.0"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="TitleBarBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource DarkGray2}" Offset="0"/>
+        <GradientStop Color="{StaticResource DarkGray1}" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="PurpleGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource Purple1}" Offset="0"/>
+        <GradientStop Color="{StaticResource Purple2}" Offset="0.5"/>
+        <GradientStop Color="{StaticResource Purple3}" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="ButtonGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource Purple1}" Offset="0"/>
+        <GradientStop Color="{StaticResource Purple2}" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <RadialGradientBrush x:Key="BubbleGradientBrush">
+        <GradientStop Color="{StaticResource Purple1}" Offset="0"/>
+        <GradientStop Color="{StaticResource Purple2}" Offset="0.7"/>
+        <GradientStop Color="{StaticResource Purple3}" Offset="1"/>
+    </RadialGradientBrush>
+    
+    <SolidColorBrush x:Key="PurpleBorderBrush" Color="{StaticResource Purple1}"/>
+    <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGray}"/>
+    <SolidColorBrush x:Key="HoverGrayBrush" Color="{StaticResource HoverGray}"/>
+    <SolidColorBrush x:Key="CloseRedBrush" Color="{StaticResource CloseRed}"/>
+
+</ResourceDictionary>

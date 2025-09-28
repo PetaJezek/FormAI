@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
-
+using Microsoft.Win32;
 namespace FormAI;
 
 /// <summary>
@@ -9,4 +9,5 @@ namespace FormAI;
 /// </summary>
 public partial class App : Application
 {
+    
 }
